@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "telegrambot"
+version = "0.1.0"
+description = ""
+authors = ["braginpavel <braginpawel@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pytelegrambotapi = "^4.26.0"
+sqlalchemy = "^2.0.38"
+openai = "^1.64.0"
+fireworks-ai = "^0.15.12"
+aiohttp = "^3.11.13"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
