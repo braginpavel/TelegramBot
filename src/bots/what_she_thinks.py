@@ -41,7 +41,10 @@ async def echo_all(message):
     last_name = ""
     if message.text == "/submit":
         await bot.reply_to(
-            message, "Please wait, our experts are working on your request "
+            message,
+            "Okay, I'm on it! You're in line. "
+            "I'll send you a notification once I'm "
+            "done—usually in about a minute!",
         )
         data = {
             "telegram_id": telegram_id,
