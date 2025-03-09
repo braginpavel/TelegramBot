@@ -21,4 +21,7 @@ COPY src/ ./src
 WORKDIR /app
 ENV PYTHONPATH="${PYTHONPATH}: app/"
 
+# Run server
+EXPOSE 8080
+
 ENTRYPOINT make run-app
