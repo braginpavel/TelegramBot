@@ -143,8 +143,7 @@ async def echo_all(message):
         n_messages = n_messages + 1
     where telegram_id = {telegram_id}
     """
-    await bot.reply_to(message, "before")
-    # async with pool.connection() as conn:
-    #     async with conn.cursor() as cursor:
-    #         await cursor.execute(query)
-    await bot.reply_to(message, "after")
+    async with pool.connection() as conn:
+        async with conn.cursor() as cursor:
+            await cursor.execute(query)
+    await bot.reply_to(message, "Message processed")
