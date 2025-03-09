@@ -1,6 +1,6 @@
 import asyncio
 import json
-import os
+import logging
 import re
 import time
 
@@ -20,6 +20,7 @@ conninfo = (
     f'password={DB_PASSWORD}'
 )
 pool = psycopg_pool.AsyncConnectionPool(conninfo=conninfo, open=False)
+logger = logging.getLogger("what_she_thinks")
 
 
 async def open_pool():
@@ -146,4 +147,4 @@ async def echo_all(message):
     async with pool.connection() as conn:
         async with conn.cursor() as cursor:
             await cursor.execute(query)
-    print(time.time() - t)
+    logger.info(time.time() - t)
