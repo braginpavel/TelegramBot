@@ -24,6 +24,4 @@ ENV PYTHONPATH="${PYTHONPATH}: app/"
 # Run server
 EXPOSE 8080
 
-CMD nohup make run-app &
-
-ENTRYPOINT poetry run python -m http.server 8080
+ENTRYPOINT make run-app
