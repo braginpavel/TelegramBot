@@ -33,7 +33,7 @@ async def echo_all(message):
     last_name = ""
     if message.text == "/submit":
         await bot.reply_to(
-            message, "Please wait, our experts are working on your request"
+            message, "Please wait, our experts are working on your request "
         )
         data = {
             "telegram_id": telegram_id,
