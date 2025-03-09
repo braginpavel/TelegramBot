@@ -143,8 +143,8 @@ async def echo_all(message):
         n_messages = n_messages + 1
     where telegram_id = {telegram_id}
     """
-    t = time.time()
+    await bot.reply_to(message, "before")
     async with pool.connection() as conn:
         async with conn.cursor() as cursor:
             await cursor.execute(query)
-    logger.info(time.time() - t)
+    await bot.reply_to(message, "after")
