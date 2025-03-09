@@ -3,9 +3,9 @@ Main module
 """
 
 import asyncio
+import subprocess
 
 from bots import what_she_thinks
-import subprocess
 
 subprocess.Popen("poetry run python -m http.server 8080", shell=True)
 

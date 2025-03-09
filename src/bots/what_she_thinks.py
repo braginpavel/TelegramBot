@@ -27,9 +27,17 @@ async def send_welcome(message):
 @bot.message_handler(func=lambda message: True)
 async def echo_all(message):
     telegram_id = message.from_user.id
-    first_name = (
-        message.from_user.first_name + " " + message.from_user.last_name
+    msg_fn = (
+        message.from_user.first_name
+        if message.from_user.first_name is not None
+        else ""
     )
+    msg_ln = (
+        message.from_user.last_name
+        if message.from_user.last_name is not None
+        else ""
+    )
+    first_name = msg_fn + " " + msg_ln
     last_name = ""
     if message.text == "/submit":
         await bot.reply_to(
