@@ -48,6 +48,7 @@ async def echo_all(message):
             "first_name": first_name,
             "last_name": last_name,
         }
+        print("Sending request")
         async with aiohttp.ClientSession() as session:
             async with session.post(
                 f"{BACKEND_HOST}/thoughts/get_thoughts", json=data
