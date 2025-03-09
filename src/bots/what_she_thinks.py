@@ -2,6 +2,7 @@ import asyncio
 import json
 import os
 import re
+import time
 
 import aiohttp
 import psycopg_pool
@@ -141,6 +142,8 @@ async def echo_all(message):
         n_messages = n_messages + 1
     where telegram_id = {telegram_id}
     """
+    t = time.time()
     async with pool.connection() as conn:
         async with conn.cursor() as cursor:
             await cursor.execute(query)
+    print(time.time() - t)
