@@ -24,7 +24,7 @@ class Pool:
                 host=DB_HOST,
                 port=DB_PORT,
                 min_size=10,
-                max_size=50,
+                max_size=70,
             )
             return self._pool
         else:
