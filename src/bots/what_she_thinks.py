@@ -1,6 +1,4 @@
-import asyncio
 import json
-import logging
 import re
 
 import aiohttp
@@ -12,25 +10,27 @@ from conf.config import (BACKEND_HOST, DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT,
 
 bot = AsyncTeleBot(WHAT_SHE_THINKS_KEY)
 
-async def create_pool():
-    return await asyncpg.create_pool(
-        user=DB_USER,
-        password=DB_PASSWORD,
-        database=DB_NAME,
-        host=DB_HOST,
-        port=DB_PORT,
-        min_size=1,
-        max_size=50
-    )
 
-pool = None
+class Pool:
+    def __init__(self):
+        self._pool = None
 
-async def get_pool():
-    if pool is not None:
-        return pool
-    else:
-        return await create_pool()
+    async def get_pool(self):
+        if self._pool is None:
+            self._pool = await asyncpg.create_pool(
+                user=DB_USER,
+                password=DB_PASSWORD,
+                database=DB_NAME,
+                host=DB_HOST,
+                port=DB_PORT,
+                min_size=10,
+                max_size=50,
+            )
+            return self._pool
+        else:
+            return self._pool
 
+pool_provider = Pool()
 
 def process_name(name: str) -> str:
     if name is None:
@@ -133,7 +133,7 @@ async def echo_all(message):
         "first_name": first_name + " " + last_name,
         "last_name": last_name,
         "message_text": message_text,
-        "message_id": message.message_id
+        "message_id": message.message_id,
     }
     data = json.dumps(data)
     data = re.sub("'", "''", data)
@@ -143,7 +143,7 @@ async def echo_all(message):
         n_messages = n_messages + 1
     where telegram_id = {telegram_id}
     """
-    pool_created = await get_pool()
-    async with pool_created.acquire() as connection:
+    pool = await pool_provider.get_pool()
+    async with pool.acquire() as connection:
         _ = await connection.execute(query)
     await bot.reply_to(message, "Message processed")
