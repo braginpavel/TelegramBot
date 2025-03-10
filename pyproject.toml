@@ -17,6 +17,7 @@ isort = "^6.0.1"
 psycopg2-binary = "^2.9.10"
 psycopg-pool = "^3.2.6"
 psycopg = "^3.2.5"
+asyncpg = "^0.30.0"
 
 
 [build-system]

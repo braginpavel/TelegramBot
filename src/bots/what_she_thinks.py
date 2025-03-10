@@ -2,34 +2,32 @@ import asyncio
 import json
 import logging
 import re
-import time
 
 import aiohttp
-import psycopg_pool
+import asyncpg
 from telebot.async_telebot import AsyncTeleBot
 
 from conf.config import (BACKEND_HOST, DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT,
                          DB_USER, WHAT_SHE_THINKS_KEY)
 
 bot = AsyncTeleBot(WHAT_SHE_THINKS_KEY)
-conninfo = (
-    f'host={DB_HOST} '
-    f'port={DB_PORT} '
-    f'dbname={DB_NAME} '
-    f'user={DB_USER} '
-    f'password={DB_PASSWORD}'
-)
-pool = psycopg_pool.AsyncConnectionPool(conninfo=conninfo, open=False)
-logger = logging.getLogger("what_she_thinks")
 
+async def create_pool():
+    return await asyncpg.create_pool(
+        user=DB_USER,
+        password=DB_PASSWORD,
+        database=DB_NAME,
+        host=DB_HOST,
+        port=DB_PORT
+    )
 
-async def open_pool():
-    await pool.open()
-    await pool.wait()
-    print("Connection Pool Opened")
+pool = None
 
-
-asyncio.run(open_pool())
+async def get_pool():
+    if pool is not None:
+        return pool
+    else:
+        return await create_pool()
 
 
 def process_name(name: str) -> str:
@@ -143,7 +141,7 @@ async def echo_all(message):
         n_messages = n_messages + 1
     where telegram_id = {telegram_id}
     """
-    async with pool.connection() as conn:
-        async with conn.cursor() as cursor:
-            await cursor.execute(query)
+    pool_created = await get_pool()
+    async with pool_created.acquire() as connection:
+        _ = await connection.execute(query)
     await bot.reply_to(message, "Message processed")
