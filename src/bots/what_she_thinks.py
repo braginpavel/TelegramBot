@@ -18,7 +18,9 @@ async def create_pool():
         password=DB_PASSWORD,
         database=DB_NAME,
         host=DB_HOST,
-        port=DB_PORT
+        port=DB_PORT,
+        min_size=1,
+        max_size=50
     )
 
 pool = None
