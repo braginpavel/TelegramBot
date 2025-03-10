@@ -40,7 +40,7 @@ def process_name(name: str) -> str:
 
 
 @bot.message_handler(commands=["start", "help"])
-async def send_welcome(message):
+async def send_welcome1(message):
     first_name = process_name(message.from_user.first_name)
     last_name = process_name(message.from_user.last_name)
     telegram_id = message.from_user.id
@@ -62,7 +62,7 @@ async def send_welcome(message):
 
 
 @bot.message_handler(commands=["submit"])
-async def send_welcome(message):
+async def send_welcome2(message):
     first_name = process_name(message.from_user.first_name)
     last_name = process_name(message.from_user.last_name)
     telegram_id = message.from_user.id
@@ -88,7 +88,7 @@ async def send_welcome(message):
 
 
 @bot.message_handler(commands=["full_thought"])
-async def send_welcome(message):
+async def send_welcome3(message):
     first_name = process_name(message.from_user.first_name)
     last_name = process_name(message.from_user.last_name)
     telegram_id = message.from_user.id
@@ -106,7 +106,9 @@ async def send_welcome(message):
     output = re.sub("\n*</think>", "", output)
     output = re.sub("\n+", "\n", output)
     output = output.split("\n")
-    for i in output:
+    for num, i in enumerate(output):
+        if num == 0:
+            continue
         await bot.reply_to(message, i[:4095])
 
 
