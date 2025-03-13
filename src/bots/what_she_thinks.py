@@ -64,7 +64,7 @@ formatting.mitalic("""If it's a group chat, the bot will check what the last per
 """3. When you're done, tap the bot menu button near the message field. 
 4. Press /submit to get a quick summary of hidden thoughts.
 5. Then, press /details to see the full thought process behind the messages.
-"""), parse_mode='MarkdownV2'
+"""), separator=" ", parse_mode='MarkdownV2'
     )
 
 
