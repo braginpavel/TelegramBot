@@ -56,8 +56,13 @@ async def send_welcome1(message):
             _ = await response.json()
     await bot.reply_to(
         message,
-        "Hi! Send me a message or a chat with someone,"
-        " type '/submit' and I'll tell you what they were thinking!",
+        """Hi! Want to know how to use the bot?
+1. Send or forward any telegram messages or chats here.
+2. The bot will let you know when they are processed. __If it's a group chat, the bot will check what the last person said. Captioned photos and videos will not be processed correctly__
+3. When you're done, tap the bot menu button near the message field. 
+4. Press /submit to get a quick summary of hidden thoughts.
+5. Then, press /details to see the full thought process behind the messages.
+"""
     )
 
 
@@ -87,7 +92,7 @@ async def send_welcome2(message):
     await bot.reply_to(message, response)
 
 
-@bot.message_handler(commands=["full_thought"])
+@bot.message_handler(commands=["details"])
 async def send_welcome3(message):
     first_name = process_name(message.from_user.first_name)
     last_name = process_name(message.from_user.last_name)
