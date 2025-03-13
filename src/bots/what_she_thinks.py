@@ -4,6 +4,7 @@ import re
 import aiohttp
 import asyncpg
 from telebot.async_telebot import AsyncTeleBot
+from telebot import formatting
 
 from conf.config import (BACKEND_HOST, DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT,
                          DB_USER, WHAT_SHE_THINKS_KEY)
@@ -56,13 +57,14 @@ async def send_welcome1(message):
             _ = await response.json()
     await bot.reply_to(
         message,
-        """Hi! Want to know how to use the bot?
+        formatting.format_text("""Hi! Want to know how to use the bot?
 1. Send or forward any telegram messages or chats here.
-2. The bot will let you know when they are processed. __If it's a group chat, the bot will check what the last person said. Captioned photos and videos will not be processed correctly__
-3. When you're done, tap the bot menu button near the message field. 
+2. The bot will let you know when they are processed.""",
+formatting.mitalic("""If it's a group chat, the bot will check what the last person said. Captioned photos and videos will not be processed correctly"""),
+"""3. When you're done, tap the bot menu button near the message field. 
 4. Press /submit to get a quick summary of hidden thoughts.
 5. Then, press /details to see the full thought process behind the messages.
-"""
+"""), parse_mode='MarkdownV2'
     )
 
 
