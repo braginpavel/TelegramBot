@@ -59,9 +59,9 @@ async def send_welcome1(message):
         message,
 """Hi! Want to know how to use the bot?
 1. Send or forward any telegram messages or chats here.
-2. The bot will let you know when they are processed."""
-"""If it's a group chat, the bot will check what the last person said. Captioned photos and videos will not be processed correctly""",
-"""3. When you're done, tap the bot menu button near the message field. 
+2. The bot will let you know when they are processed.
+If it's a group chat, the bot will check what the last person said. Captioned photos and videos will not be processed correctly
+3. When you're done, tap the bot menu button near the message field. 
 4. Press /submit to get a quick summary of hidden thoughts.
 5. Then, press /details to see the full thought process behind the messages."""
     )
