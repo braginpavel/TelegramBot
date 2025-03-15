@@ -130,7 +130,7 @@ async def echo_all(message):
         sender_name = message.forward_sender_name
     else:
         sender_name = (
-            message.from_user.first_name + " " + message.from_user.last_name
+            first_name + " " + last_name
         )
     sender_id = "0"
     message_text = message.text
