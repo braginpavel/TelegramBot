@@ -324,7 +324,7 @@ Captioned images or videos are not supported"""
         output = output.split("\n")
         
         # Delete previous messages before sending details
-        await delete_previous_messages(telegram_id, chat_id)
+        # await delete_previous_messages(telegram_id, chat_id)
         
         for num, i in enumerate(output):
             if num == 0:
