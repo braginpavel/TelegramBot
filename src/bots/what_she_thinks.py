@@ -178,8 +178,54 @@ async def callback_query(call):
         reply_markup=None
     )
     
-    # Directly call the appropriate handler based on the button clicked
+    # Create a proper message object for function calls
+    chat_id = call.message.chat.id
+    
+    # Instead of directly calling the handler functions, send appropriate responses
     if call.data == "submit":
-        await send_welcome2(call.message)
+        first_name = process_name(call.from_user.first_name)
+        last_name = process_name(call.from_user.last_name)
+        telegram_id = call.from_user.id
+        await bot.send_message(
+            chat_id,
+            "Okay, I'm on it! You're in line. "
+            "I'll send you a notification once I'm "
+            "done—usually in about a minute!"
+        )
+        data = {
+            "telegram_id": telegram_id,
+            "first_name": first_name,
+            "last_name": last_name,
+        }
+        print("Sending submit request")
+        async with aiohttp.ClientSession() as session:
+            async with session.post(
+                f"{BACKEND_HOST}/thoughts/get_thoughts", json=data
+            ) as response:
+                response = await response.json()
+        response = re.sub("[*]", "", response)
+        await bot.send_message(chat_id, response)
     elif call.data == "help" or call.data == "start":
-        await send_welcome1(call.message)
+        first_name = process_name(call.from_user.first_name)
+        last_name = process_name(call.from_user.last_name)
+        telegram_id = call.from_user.id
+        data = {
+            "first_name": first_name,
+            "last_name": last_name,
+            "telegram_id": telegram_id,
+        }
+        async with aiohttp.ClientSession() as session:
+            async with session.post(
+                f"{BACKEND_HOST}/thoughts/register", json=data
+            ) as response:
+                _ = await response.json()
+        await bot.send_message(
+            chat_id,
+"""Hi! Want to know how to use the bot?
+1. Send or forward any telegram messages or chats here.
+2. The bot will let you know when they are processed.
+If it's a group chat, the bot will check what the last person said. Captioned photos and videos will not be processed correctly
+3. When you're done, tap the bot menu button near the message field. 
+4. Press /submit to get a quick summary of hidden thoughts.
+5. Then, press /details to see the full thought process behind the messages."""
+        )
