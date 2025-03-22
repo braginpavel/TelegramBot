@@ -22,7 +22,7 @@ docker stop $CONTAINER_NAME
 docker rm $CONTAINER_NAME
 
 echo "Starting a new container with the updated image..."
-docker run -d --name $CONTAINER_NAME --env-file ./.env
+docker run -d $IMAGE_NAME --name $CONTAINER_NAME --env-file ./.env
 
 echo "Deployment completed successfully!"
 echo "Container $CONTAINER_NAME is now running with the updated code."
