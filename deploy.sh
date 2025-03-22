@@ -22,7 +22,7 @@ docker stop $CONTAINER_NAME
 docker rm $CONTAINER_NAME
 
 echo "Starting a new container with the updated image..."
-docker run -d --name $CONTAINER_NAME \
+docker run -d --name $CONTAINER_NAME --env-file ./.env \
   --restart unless-stopped \
   -v $(pwd):/app \
   $IMAGE_NAME
