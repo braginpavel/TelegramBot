@@ -5,6 +5,7 @@ import aiohttp
 import asyncpg
 from telebot.async_telebot import AsyncTeleBot
 from telebot import formatting
+from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from conf.config import (BACKEND_HOST, DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT,
                          DB_USER, WHAT_SHE_THINKS_KEY)
@@ -154,4 +155,27 @@ async def echo_all(message):
     pool = await pool_provider.get_pool()
     async with pool.acquire() as connection:
         _ = await connection.execute(query)
-    await bot.reply_to(message, "Message processed")
+    
+    # Create inline keyboard with buttons
+    markup = InlineKeyboardMarkup()
+    submit_button = InlineKeyboardButton("Submit", callback_data="submit")
+    help_button = InlineKeyboardButton("Help", callback_data="help")
+    start_button = InlineKeyboardButton("Start", callback_data="start")
+    markup.row(submit_button, help_button, start_button)
+    
+    await bot.reply_to(message, "Message processed. What would you like to do next?", reply_markup=markup)
+
+# Handle callback queries from inline buttons
+@bot.callback_query_handler(func=lambda call: True)
+async def callback_query(call):
+    if call.data == "submit":
+        await send_welcome2(call.message)
+    elif call.data == "help" or call.data == "start":
+        await send_welcome1(call.message)
+    
+    # Remove the inline keyboard after user clicks a button
+    await bot.edit_message_reply_markup(
+        chat_id=call.message.chat.id,
+        message_id=call.message.message_id,
+        reply_markup=None
+    )
