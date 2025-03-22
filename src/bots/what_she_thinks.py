@@ -110,7 +110,7 @@ async def send_welcome2(message):
     # Store sent message ID
     if telegram_id not in user_messages:
         user_messages[telegram_id] = []
-    user_messages[telegram_id].append(sent_msg.message_id)
+    # user_messages[telegram_id].append(sent_msg.message_id)
     
     data = {
         "telegram_id": telegram_id,
@@ -132,7 +132,7 @@ async def send_welcome2(message):
 
     # Send the response with the inline buttons
     sent_msg = await bot.reply_to(message, response, reply_markup=details_markup)
-    user_messages[telegram_id].append(sent_msg.message_id)
+    # user_messages[telegram_id].append(sent_msg.message_id)
 
 
 @bot.message_handler(commands=["details"])
@@ -267,7 +267,7 @@ async def callback_query(call):
             "done—usually in about a minute!"
         )
         # Store sent message ID
-        user_messages[telegram_id].append(sent_msg.message_id)
+        # user_messages[telegram_id].append(sent_msg.message_id)
         
         data = {
             "telegram_id": telegram_id,
@@ -299,7 +299,7 @@ async def callback_query(call):
 Captioned images or videos are not supported"""
         )
         # Store sent message ID
-        user_messages[telegram_id].append(sent_msg.message_id)
+        # user_messages[telegram_id].append(sent_msg.message_id)
         
     elif call.data == "details":
         # Handle the details button click to call get_think_details API
