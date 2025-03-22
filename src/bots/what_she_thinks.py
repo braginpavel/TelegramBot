@@ -53,6 +53,8 @@ async def delete_previous_messages(user_id, chat_id):
             except ApiTelegramException as e:
                 # Message might already be deleted or too old to delete
                 print(f"Could not delete message {msg_id}: {e}")
+            except Exception as e:
+                pass
         # Clear the list after attempting to delete all messages
         user_messages[user_id] = []
 
