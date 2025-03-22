@@ -159,9 +159,8 @@ async def echo_all(message):
     # Create inline keyboard with buttons
     markup = InlineKeyboardMarkup()
     submit_button = InlineKeyboardButton("Submit", callback_data="submit")
-    help_button = InlineKeyboardButton("Help", callback_data="help")
-    start_button = InlineKeyboardButton("Start", callback_data="start")
-    markup.row(submit_button, help_button, start_button)
+    add_button = InlineKeyboardButton("Add message", callback_data="add")
+    markup.row(submit_button, add_button)
     
     await bot.reply_to(message, "Message processed. What would you like to do next?", reply_markup=markup)
 
@@ -205,27 +204,9 @@ async def callback_query(call):
                 response = await response.json()
         response = re.sub("[*]", "", response)
         await bot.send_message(chat_id, response)
-    elif call.data == "help" or call.data == "start":
-        first_name = process_name(call.from_user.first_name)
-        last_name = process_name(call.from_user.last_name)
-        telegram_id = call.from_user.id
-        data = {
-            "first_name": first_name,
-            "last_name": last_name,
-            "telegram_id": telegram_id,
-        }
-        async with aiohttp.ClientSession() as session:
-            async with session.post(
-                f"{BACKEND_HOST}/thoughts/register", json=data
-            ) as response:
-                _ = await response.json()
+    elif call.data == "add":
         await bot.send_message(
             chat_id,
-"""Hi! Want to know how to use the bot?
-1. Send or forward any telegram messages or chats here.
-2. The bot will let you know when they are processed.
-If it's a group chat, the bot will check what the last person said. Captioned photos and videos will not be processed correctly
-3. When you're done, tap the bot menu button near the message field. 
-4. Press /submit to get a quick summary of hidden thoughts.
-5. Then, press /details to see the full thought process behind the messages."""
+"""Forward here or copy any message where you want to uncover secret thoughts.
+Captioned images or videos are not supported"""
         )
