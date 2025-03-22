@@ -169,9 +169,9 @@ async def echo_all(message):
 @bot.callback_query_handler(func=lambda call: True)
 async def callback_query(call):
     if call.data == "/submit":
-        await send_welcome2(call.message)
+        await send_welcome2(call.data)
     elif call.data == "/help" or call.data == "/start":
-        await send_welcome1(call.message)
+        await send_welcome1(call.data)
     
     # Remove the inline keyboard after user clicks a button
     await bot.edit_message_reply_markup(
