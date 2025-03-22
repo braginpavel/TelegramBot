@@ -91,7 +91,14 @@ async def send_welcome2(message):
         ) as response:
             response = await response.json()
     response = re.sub("[*]", "", response)
-    await bot.reply_to(message, response)
+    # Create inline keyboard with buttons for the response message
+    details_markup = InlineKeyboardMarkup()
+    details_button = InlineKeyboardButton("Uncover more details", callback_data="details")
+    start_button = InlineKeyboardButton("Go to start", callback_data="add")
+    details_markup.row(details_button, start_button)
+
+    # Send the response with the inline buttons
+    await bot.reply_to(message, response, reply_markup=details_markup)
 
 
 @bot.message_handler(commands=["details"])
@@ -203,10 +210,41 @@ async def callback_query(call):
             ) as response:
                 response = await response.json()
         response = re.sub("[*]", "", response)
-        await bot.send_message(chat_id, response)
+        
+        # Create inline keyboard with buttons for the response message
+        details_markup = InlineKeyboardMarkup()
+        details_button = InlineKeyboardButton("Uncover more details", callback_data="details")
+        start_button = InlineKeyboardButton("Go to start", callback_data="add")
+        details_markup.row(details_button, start_button)
+        
+        # Send the response with the inline buttons
+        await bot.send_message(chat_id, response, reply_markup=details_markup)
     elif call.data == "add":
         await bot.send_message(
             chat_id,
 """Forward here or copy any message where you want to uncover secret thoughts.
 Captioned images or videos are not supported"""
         )
+    elif call.data == "details":
+        # Handle the details button click to call get_think_details API
+        first_name = process_name(call.from_user.first_name)
+        last_name = process_name(call.from_user.last_name)
+        telegram_id = call.from_user.id
+        data = {
+            "telegram_id": telegram_id,
+            "first_name": first_name,
+            "last_name": last_name,
+        }
+        async with aiohttp.ClientSession() as session:
+            async with session.post(
+                f"{BACKEND_HOST}/thoughts/get_think_details", json=data
+            ) as response:
+                output = await response.json()
+        output = re.sub("<think>\n*", "", output)
+        output = re.sub("\n*</think>", "", output)
+        output = re.sub("\n+", "\n", output)
+        output = output.split("\n")
+        for num, i in enumerate(output):
+            if num == 0:
+                continue
+            await bot.send_message(chat_id, i[:4095])
