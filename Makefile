@@ -18,4 +18,3 @@ build_container:
 
 run_container:
 	 docker run --env-file ./.env -d telegram_bot
-
