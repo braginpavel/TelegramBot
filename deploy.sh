@@ -14,6 +14,7 @@ echo "Starting deployment process..."
 # git pull
 
 echo "Building new Docker image..."
+docker rm image $IMAGE_NAME
 docker build -t $IMAGE_NAME .
 
 echo "Stopping and removing the current container..."
