@@ -86,10 +86,10 @@ If it's a group chat, the bot will check what the last person said. Captioned ph
 5. Then, press /details to see the full thought process behind the messages."""
     )
     
-    # Store sent message ID for potential cleanup later
-    if telegram_id not in user_messages:
-        user_messages[telegram_id] = []
-    user_messages[telegram_id].append(sent_msg.message_id)
+    # # Store sent message ID for potential cleanup later
+    # if telegram_id not in user_messages:
+    #     user_messages[telegram_id] = []
+    # user_messages[telegram_id].append(sent_msg.message_id)
 
 
 @bot.message_handler(commands=["submit"])
@@ -166,7 +166,7 @@ async def send_welcome3(message):
         if num == 0:
             continue
         sent_msg = await bot.reply_to(message, i[:4095])
-        user_messages[telegram_id].append(sent_msg.message_id)
+        # user_messages[telegram_id].append(sent_msg.message_id)
 
 
 @bot.message_handler(func=lambda message: True)
@@ -290,7 +290,7 @@ async def callback_query(call):
         
         # Send the response with the inline buttons and store message ID
         sent_msg = await bot.send_message(chat_id, response, reply_markup=details_markup)
-        user_messages[telegram_id].append(sent_msg.message_id)
+        # user_messages[telegram_id].append(sent_msg.message_id)
         
     elif call.data == "add":
         sent_msg = await bot.send_message(
@@ -328,4 +328,4 @@ Captioned images or videos are not supported"""
             if num == 0:
                 continue
             sent_msg = await bot.send_message(chat_id, i[:4095])
-            user_messages[telegram_id].append(sent_msg.message_id)
+            # user_messages[telegram_id].append(sent_msg.message_id)
